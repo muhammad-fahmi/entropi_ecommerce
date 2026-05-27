@@ -1,0 +1,27 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: entropi
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: entropi_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "3001:3001"
+    environment:
+      - DATABASE_URL=postgresql://entropi:password@db:5432/entropi_db?schema=public
+    depends_on:
+      - db
+    command: >
+      sh -c "npx prisma db push && npx tsx src/server/index.ts"
+
+volumes:
+  pgdata:

@@ -1,18 +1,47 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
-model Test {
-  id Int @id @default(autoincrement())
-  name String
+model EventLog {
+  id             String   @id @default(uuid())
+  aggregateId    String
+  eventType      String   // OrderCreated, PaymentProcessing, PaymentConfirmed, FeeCalculated, OrderShipped, OrderDelivered, SettlementProcessed
+  payload        Json
+  version        Int
+  timestamp      DateTime @default(now())
+  idempotencyKey String   @unique
+
+  @@unique([aggregateId, version])
+  @@index([aggregateId, version])
+  @@index([eventType])
+  @@index([timestamp])
+}
+
+model Ledger {
+  id        String   @id @default(uuid())
+  orderId   String
+  account   String   // order_balance, payment, fees, payout
+  debit     Decimal? @db.Decimal(18, 4)
+  credit    Decimal? @db.Decimal(18, 4)
+  timestamp DateTime @default(now())
+
+  order     Order    @relation(fields: [orderId], references: [id])
+}
+
+model Order {
+  id               String   @id @default(uuid())
+  customerId       String?
+  amount           Decimal  @db.Decimal(18, 4)
+  payment_received Decimal  @default(0) @db.Decimal(18, 4)
+  status           String   @default("pending")
+  version          Int      @default(0)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  ledgers          Ledger[]
 }

@@ -1,0 +1,136 @@
+﻿
+> entropi_ecommerce@0.1.0 test
+> jest
+
+  console.log
+    
+    --- STRESS TEST REPORT ---
+
+      at tests/backend.test.ts:237:13
+
+  console.log
+    Total orders: 1000
+
+      at tests/backend.test.ts:238:13
+
+  console.log
+    Batch size: 50
+
+      at tests/backend.test.ts:239:13
+
+  console.log
+    
+    [Phase 1: Order Creation]
+
+      at tests/backend.test.ts:240:13
+
+  console.log
+      Success: 1000/1000
+
+      at tests/backend.test.ts:241:13
+
+  console.log
+      Failed:  0/1000
+
+      at tests/backend.test.ts:242:13
+
+  console.log
+      Duration: 2831ms
+
+      at tests/backend.test.ts:243:13
+
+  console.log
+      Throughput: 353.2 orders/sec
+
+      at tests/backend.test.ts:244:13
+
+  console.log
+    
+    [Phase 2: Payment Processing]
+
+      at tests/backend.test.ts:262:13
+
+  console.log
+      Success: 1000/1000
+
+      at tests/backend.test.ts:263:13
+
+  console.log
+      Failed:  0/1000
+
+      at tests/backend.test.ts:264:13
+
+  console.log
+      Duration: 1685ms
+
+      at tests/backend.test.ts:265:13
+
+  console.log
+      Throughput: 593.5 payments/sec
+
+      at tests/backend.test.ts:266:13
+
+  console.log
+    
+    [Summary]
+
+      at tests/backend.test.ts:268:13
+
+  console.log
+      Total duration: 4588ms (4.6s)
+
+      at tests/backend.test.ts:269:13
+
+  console.log
+      End-to-end throughput: 435.9 ops/sec
+
+      at tests/backend.test.ts:270:13
+
+  console.log
+      Error rate: 0.00%
+
+      at tests/backend.test.ts:271:13
+
+  console.log
+    --- END STRESS TEST ---
+
+      at tests/backend.test.ts:272:13
+
+docker : PASS tests/backend.test.ts (10.795 s)
+At line:1 char:1
++ docker exec entropi_ecommerce-backend-1 npm test 2>&1 
+| Out-File -Enc ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (PASS tests/ 
+   backend.test.ts (10.795 s):String) [], RemoteExcepti  
+  on
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  Financial Event Store & Ledger API
+    Γ£ô 1. Happy Path: Should create an order and record 
+payment successfully (1677 ms)
+    Γ£ô 2. Idempotency: Should return the exact same 
+response for duplicate create/pay requests (97 ms)
+    Γ£ô 3. Ledger Balance: Sum of Debits must strictly 
+equal Sum of Credits (569 ms)
+    Γ£ô 4. Decimal Precision: Edge case calculation 
+(e.g. 1 USD fee = 0.03) (59 ms)
+    Γ£ô 5. Concurrent Orders: 100 concurrent payments 
+should not corrupt ledger or duplicate (2344 ms)
+    Γ£ô 6. Settlement Idempotency: Not implemented yet, 
+testing placeholder (3 ms)
+    Γ£ô 7. Version Conflict: Optimistic concurrency 
+rejects outdated modifications (76 ms)
+    Γ£ô 8. Invalid Transition: Paying an already paid 
+order (19 ms)
+    Γ£ô 9. Projection Consistency: Read model matches 
+event log (14 ms)
+  Stress Test: 1000 Concurrent Orders (Durability)
+    Γ£ô should handle 1000 concurrent order creations + 
+payments without crashing (4635 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       10 passed, 10 total
+Snapshots:   0 total
+Time:        8.536 s
+Ran all test suites.
