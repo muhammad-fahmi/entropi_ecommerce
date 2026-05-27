@@ -16,4 +16,4 @@ RUN npm install -g tsx
 
 EXPOSE 3001
 
-CMD sh -c "npx prisma migrate deploy && npx tsx src/server/index.ts"
+CMD sh -c "npx prisma db push --accept-data-loss && npx tsx src/server/index.ts"
