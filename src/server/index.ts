@@ -296,8 +296,9 @@ server.get('/api/ledger', async (request, reply) => {
 
 const start = async () => {
   try {
-    await server.listen({ port: 3001, host: '0.0.0.0' });
-    console.log('Server running on http://localhost:3001');
+    const port = Number(process.env.PORT) || 3001;
+    await server.listen({ port, host: '0.0.0.0' });
+    console.log(`Server running on http://localhost:${port}`);
   } catch (err) {
     server.log.error(err);
     process.exit(1);
