@@ -4,6 +4,8 @@ import { Container, Typography, Box, Paper, Grid, Divider, Button, Dialog, Dialo
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useCart } from '../../context/CartContext';
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://entropiecommerce-production.up.railway.app';
+
 export default function Checkout() {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -26,14 +28,14 @@ export default function Checkout() {
       const idempotencyKeyCreate = crypto.randomUUID();
       const idempotencyKeyPay = crypto.randomUUID();
 
-      const createRes = await fetch('http://localhost:3001/api/orders', {
+      const createRes = await fetch(`${API_BASE_URL}/api/orders`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: orderId, amount: total.toFixed(2), idempotencyKey: idempotencyKeyCreate })
       });
       if (!createRes.ok) throw new Error('Order creation failed');
 
-      const payRes = await fetch(`http://localhost:3001/api/orders/${orderId}/pay`, {
+      const payRes = await fetch(`${API_BASE_URL}/api/orders/${orderId}/pay`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ amount: total.toFixed(2), idempotencyKey: idempotencyKeyPay, stripeId: 'mock' })

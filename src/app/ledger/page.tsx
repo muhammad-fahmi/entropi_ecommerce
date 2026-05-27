@@ -21,11 +21,13 @@ interface GroupedTransaction {
   totalCredit: number;
 }
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://entropiecommerce-production.up.railway.app';
+
 export default function LedgerView() {
   const [ledgerData, setLedgerData] = useState<LedgerRow[]>([]);
   
   useEffect(() => {
-    fetch('http://localhost:3001/api/ledger')
+    fetch(`${API_BASE_URL}/api/ledger`)
       .then(r => r.json())
       .then(data => {
         if (data.ledgers) setLedgerData(data.ledgers);
